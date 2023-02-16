@@ -1,0 +1,26 @@
+mysql> \status
+--------------
+
+Connection id:		14
+Current database:	
+Current user:		root@localhost
+SSL:			Not in use
+Current pager:		stdout
+Using outfile:		'out'
+Using delimiter:	;
+Server version:		8.0.32-0ubuntu0.22.04.2 (Ubuntu)
+Protocol version:	10
+Connection:		Localhost via UNIX socket
+Server characterset:	utf8mb4
+Db     characterset:	utf8mb4
+Client characterset:	utf8mb4
+Conn.  characterset:	utf8mb4
+UNIX socket:		/var/run/mysqld/mysqld.sock
+Binary data as:		Hexadecimal
+Uptime:			11 min 37 sec
+
+Threads: 2  Questions: 12  Slow queries: 0  Opens: 139  Flush tables: 3  Open tables: 58  Queries per second avg: 0.017
+--------------
+
+    -> \c
+mysql> \q
