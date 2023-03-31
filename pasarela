@@ -90,10 +90,22 @@ BEGIN
     SELECT * from Actores where nacionalidad = nacion;
 END;
 
+CREATE PROCEDURE peliculasPorNacionalidad(in nacion varchar(25))
+BEGIN
+    SELECT * from Peliculas where nacionalidad = nacion;
+END;
+
+CREATE PROCEDURE ponerMayusculas(in palabra varchar(25))
+BEGIN
+    select upper(palabra);
+END;
+
 CREATE PROCEDURE contar_directores()
 BEGIN
     DECLARE num_directores INT;
     SELECT COUNT(*) INTO num_directores FROM Directores;
+
+    
 
     SET @num_llamados = IFNULL(@num_llamados, 0) + 1;
     
@@ -104,9 +116,18 @@ BEGIN
             num_llamados INT
         );
     END IF;
+
+    if @num_llamados >= 10 THEN
+
+    delete from cuentaDirectores where @num_llamados = (select min(@num_llamados) from cuentaDirectores);
+
+    end if;
     
     INSERT INTO cuentaDirectores (fecha_hora, num_directores, num_llamados) VALUES (NOW(), num_directores, @num_llamados);
 END //
 
 
 DELIMITER ;
+
+mysql> call contar_directores;
+ERROR 1093 (HY000): You can't specify target table 'cuentaDirectores' for update in FROM clause
