@@ -110,6 +110,7 @@ BEGIN
     SET @num_llamados = IFNULL(@num_llamados, 0) + 1;
     
     IF NOT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'cuentaDirectores') THEN
+        SET @num_llamados=0;
         CREATE TABLE cuentaDirectores (
             fecha_hora DATETIME,
             num_directores INT,
@@ -119,14 +120,18 @@ BEGIN
 
     if @num_llamados >= 10 THEN
 
-    delete from cuentaDirectores where @num_llamados = (select min(@num_llamados) from cuentaDirectores);
+    delete from cuentaDirectores where num_llamados = (select min(num_llamados) from cuentaDirectores);
 
     end if;
     
+
+  
     INSERT INTO cuentaDirectores (fecha_hora, num_directores, num_llamados) VALUES (NOW(), num_directores, @num_llamados);
 END //
 
 
 DELIMITER ;
 
-ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`practica2`.`Peliculas`, CONSTRAINT `Peliculas_ibfk_1` FOREIGN KEY (`ID_director`) REFERENCES `Directores` (`ID_director`))
+mysql> call contar_directores;
+ERROR 1093 (HY000): You can't specify target table 'cuentaDirectores' for update in FROM clause
+
