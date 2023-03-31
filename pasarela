@@ -86,3 +86,15 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 
 select Peliculas.nombre, Directores.nombre as Directores 
 from Peliculas ' at line 3
+
+
+DELIMITER //
+
+CREATE PROCEDURE listar_directores_peliculas()
+BEGIN
+    SELECT Peliculas.nombre, Directores.nombre AS Directores 
+    FROM Peliculas 
+    INNER JOIN Directores ON Peliculas.ID_director = Directores.ID_director;
+END //
+
+DELIMITER ;
