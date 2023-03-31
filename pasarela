@@ -79,9 +79,7 @@ BEGIN
     SELECT Peliculas.nombre, Directores.nombre AS Directores 
     FROM Peliculas 
     INNER JOIN Directores ON Peliculas.ID_director = Directores.ID_director;
-END //
-
-
+END 
 CREATE PROCEDURE contar_directores()
 BEGIN
     DECLARE num_directores INT;
@@ -95,8 +93,7 @@ BEGIN
     END IF;
     
     INSERT INTO cuentaDirectores (fecha_hora, num_directores) VALUES (NOW(), num_directores);
-END
+END //
+
 
 DELIMITER ;
-
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER' at line 16
