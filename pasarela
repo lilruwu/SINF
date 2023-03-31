@@ -85,9 +85,9 @@ END;
 
 CREATE PROCEDURE consultaPorNacionalidad(in nacion varchar(25))
 BEGIN
-    SELECT * Peliculas where nacionalidad = nacion;
-    SELECT * Directores where nacionalidad = nacion;
-    SELECT * Actores where nacionalidad = nacion;
+    SELECT * from Peliculas where nacionalidad = nacion;
+    SELECT * from Directores where nacionalidad = nacion;
+    SELECT * from Actores where nacionalidad = nacion;
 END;
 
 CREATE PROCEDURE contar_directores()
@@ -110,7 +110,3 @@ END //
 
 
 DELIMITER ;
-
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Peliculas where nacionalidad = nacion;
-    SELECT * Directores where nacionalida' at line 3
-
