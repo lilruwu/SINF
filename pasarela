@@ -81,3 +81,7 @@ from Peliculas
 inner join Directores on Peliculas.ID_director = Directores.ID_director
 
 end
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as
+begin
+
