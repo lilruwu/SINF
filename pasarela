@@ -129,5 +129,4 @@ END //
 
 DELIMITER ;
 
-mysql> call contar_directores;
-ERROR 1093 (HY000): You can't specify target table 'cuentaDirectores' for update in FROM clause
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`practica2`.`Peliculas`, CONSTRAINT `Peliculas_ibfk_1` FOREIGN KEY (`ID_director`) REFERENCES `Directores` (`ID_director`))
