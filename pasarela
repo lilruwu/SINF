@@ -72,22 +72,6 @@ INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `
 (5, 'Pulp Fiction', 3, 'Leonardo DiCaprio',0110912),
 (5, 'Pulp Fiction', 5, 'Denzel Washington',0110912);
 
-create procedure listar_directores_peliculas
-
-begin
-
-select Peliculas.nombre, Directores.nombre as Directores 
-from Peliculas 
-inner join Directores on Peliculas.ID_director = Directores.ID_director
-
-end block;
-
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin
-
-select Peliculas.nombre, Directores.nombre as Directores 
-from Peliculas ' at line 3
-
-
 DELIMITER //
 
 CREATE PROCEDURE listar_directores_peliculas()
@@ -97,9 +81,7 @@ BEGIN
     INNER JOIN Directores ON Peliculas.ID_director = Directores.ID_director;
 END //
 
-DELIMITER ;
 
-DELIMITER //
 CREATE PROCEDURE contar_directores()
 BEGIN
     DECLARE num_directores INT;
@@ -116,3 +98,5 @@ BEGIN
 END
 
 DELIMITER ;
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELIMITER' at line 16
