@@ -98,3 +98,21 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE contar_directores()
+BEGIN
+    DECLARE num_directores INT;
+    SELECT COUNT(*) INTO num_directores FROM directores;
+    
+    IF NOT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'cuentaDirectores') THEN
+        CREATE TABLE cuentaDirectores (
+            fecha_hora DATETIME,
+            num_directores INT
+        );
+    END IF;
+    
+    INSERT INTO cuentaDirectores (fecha_hora, num_directores) VALUES (NOW(), num_directores);
+END
+
+DELIMITER ;
