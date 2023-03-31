@@ -73,15 +73,16 @@ INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `
 (5, 'Pulp Fiction', 5, 'Denzel Washington',0110912);
 
 create procedure listar_directores_peliculas
-as
+
 begin
 
 select Peliculas.nombre, Directores.nombre as Directores 
 from Peliculas 
 inner join Directores on Peliculas.ID_director = Directores.ID_director
 
-end
+end block;
 
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as
-begin
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'begin
 
+select Peliculas.nombre, Directores.nombre as Directores 
+from Peliculas ' at line 3
