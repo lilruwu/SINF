@@ -97,3 +97,9 @@ END //
 
 
 DELIMITER ;
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'CREATE PROCEDURE contar_directores()
+BEGIN
+    DECLARE num_directores INT;
+    S' at line 7
+
