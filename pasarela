@@ -1,35 +1,67 @@
-INSERT INTO `Actores` (`ID_actor`, `nombre`, `edad`, `nacionalidad`) VALUES
-(1, 'Tom Hanks', 65, 'Estados Unidos'), 
-(2, 'Meryl Streep', 72, 'Estados Unidos'), 
-(3, 'Leonardo DiCaprio', 47, 'Estados Unidos'), 
-(4, 'Viola Davis', 56, 'Estados Unidos'), 
-(5, 'Denzel Washington', 67, 'Estados Unidos');
+CREATE PROCEDURE extraer_imbds(in nacion varchar(25))
+BEGIN
 
-INSERT INTO `Directores` (`ID_director`, `nombre`, `edad`,`nacionalidad`) VALUES
-(1, 'Steven Spielberg', 75, 'Estados Unidos'), 
-(2, 'Quentin Tarantino', 58, 'Estados Unidos'), 
-(3, 'Christopher Nolan', 51, 'Reino Unido'), 
-(4, 'Martin Scorsese', 79, 'Estados Unidos'), 
-(5, 'Ava DuVernay', 49, 'Estados Unidos');
+    declare v_peli int;
+    declare v_actores int;
+    declare v_direct in;
 
-INSERT INTO `Peliculas` (`ID_pelicula`, `nombre`, `ID_director`,`nacionalidad`) VALUES
-(1, 'The Godfather', 4, 'Estados Unidos'), 
-(2, 'The Shawshank Redemption', 4, 'Estados Unidos'), 
-(3, 'The Dark Knight', 3, 'Estados Unidos'), 
-(4, 'Schindlers List', 1, 'Estados Unidos'), 
-(5, 'Pulp Fiction', 2, 'Estados Unidos');
+    -- crea una nueva relacion
+    set @sql = concat('CREATE TABLE IF NOT EXIST', nacion_tabla, ' (code_imbd VARCHAR(255))');
+    prepare stmt from @sql;
+    execute stmt;
 
-INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `nombre_actor`,imbd) VALUES
-(1, 'The Godfather', 1, 'Tom Hanks',0068646),
-(1, 'The Godfather', 2, 'Meryl Streep',0068646),
-(1, 'The Godfather', 4, 'Viola Davis',0068646),
-(2, 'The Shawshank Redemption', 1, 'Tom Hanks',0111161),
-(2, 'The Shawshank Redemption', 3, 'Leonardo DiCaprio',0111161),
-(2, 'The Shawshank Redemption', 5, 'Denzel Washington',0111161),
-(3, 'The Dark Knight', 1, 'Tom Hanks',0468569),
-(3, 'The Dark Knight', 3, 'Leonardo DiCaprio',0468569),
-(4, 'Schindlers List', 2, 'Meryl Streep',0108052),
-(4, 'Schindlers List', 4, 'Viola Davis',0108052),
-(5, 'Pulp Fiction', 2, 'Meryl Streep',0110912),
-(5, 'Pulp Fiction', 3, 'Leonardo DiCaprio',0110912),
-(5, 'Pulp Fiction', 5, 'Denzel Washington',0110912);
+    declare peliAux cursor for
+    SELECT ID_pelicula from Peliculas where nacionalidad = nacion;
+    declare actoresAux cursor for
+    SELECT ID_actor from Actores where nacionalidad = nacion;
+    declare directAux cursor for
+    SELECT ID_director from Directores where nacionalidad = nacion;
+    
+    --peliculas
+    open peliAux;
+    fetch peliAux into v_peli;
+
+    WHILE @@FETCH_STATUS = 0 DO
+        SET @sql = CONCAT('INSERT INTO ', nacion_tabla, ' (code_imdb) VALUES (''', v_peli, ''')');
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        
+        fetch peliAux into v_peli;
+    END WHILE;
+
+    close peliAux;
+
+    --actores
+    open actoresAux;
+    fetch actoresAux into v_actores;
+
+    WHILE @@FETCH_STATUS = 0 DO
+        SET @sql = CONCAT('INSERT INTO ', nacion_tabla, ' (code_imdb) VALUES (''', v_actores, ''')');
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        
+        fetch actoresAux into v_actores;
+    END WHILE;
+
+    close actoresAux;
+
+    --directores
+    open directAux;
+    fetch directAux into v_direct;
+
+    WHILE @@FETCH_STATUS = 0 DO
+        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_direct, ''')');
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        
+        fetch directAux into v_direct;
+    END WHILE;
+
+    close directAux;
+
+END;
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in;
+
+    
+    set @sql = concat('CREATE TABLE IF NOT EXIST', nacion_tabla, ' (co' at line 6
