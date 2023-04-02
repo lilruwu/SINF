@@ -72,3 +72,4 @@ ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that 
 
     WHILE @@FETCH_' at line 25
 
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin_cursor = TRUE;
