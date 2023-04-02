@@ -1,32 +1,33 @@
 CREATE PROCEDURE extraer_imbds(in nacion varchar(25))
 BEGIN
-
     declare v_peli int;
     declare v_actores int;
     declare v_direct int;
-    declare nacion_tabla varchar(50);
-
-    -- define el nombre de la tabla según la nacionalidad
-    set nacion_tabla = concat('Tabla_', replace(nacion, ' ', '_'));
-
-    -- crea una nueva relación
-    set @sql = concat('CREATE TABLE IF NOT EXISTS ', nacion_tabla, ' (code_imbd VARCHAR(255))');
-    prepare stmt from @sql;
-    execute stmt;
-
-    declare peliAux cursor for
+    DECLARE peliAux CURSOR FOR
     SELECT ID_pelicula from Peliculas where nacionalidad = nacion;
     declare actoresAux cursor for
     SELECT ID_actor from Actores where nacionalidad = nacion;
     declare directAux cursor for
     SELECT ID_director from Directores where nacionalidad = nacion;
 
-    --peliculas
-    open peliAux;
+  
+   
+
+    -- define el nombre de la tabla según la nacionalidad
+
+    -- crea una nueva relación
+    set @sql = concat('CREATE TABLE IF NOT EXISTS ', nacion, ' (code_imbd VARCHAR(255))');
+    prepare stmt from @sql;
+    execute stmt;
+
+    
+
+    --peliculas--
+    OPEN peliAux;
     fetch peliAux into v_peli;
 
     WHILE @@FETCH_STATUS = 0 DO
-        SET @sql = CONCAT('INSERT INTO ', nacion_tabla, ' (code_imdb) VALUES (''', v_peli, ''')');
+        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_peli, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
 
@@ -40,7 +41,7 @@ BEGIN
     fetch actoresAux into v_actores;
 
     WHILE @@FETCH_STATUS = 0 DO
-        SET @sql = CONCAT('INSERT INTO ', nacion_tabla, ' (code_imdb) VALUES (''', v_actores, ''')');
+        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_actores, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
 
@@ -54,7 +55,7 @@ BEGIN
     fetch directAux into v_direct;
 
     WHILE @@FETCH_STATUS = 0 DO
-        SET @sql = CONCAT('INSERT INTO ', nacion_tabla, ' (code_imdb) VALUES (''', v_direct, ''')');
+        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_direct, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
 
