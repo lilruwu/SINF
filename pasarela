@@ -1,63 +1,23 @@
-CREATE DATABASE practica2;
-
-USE practica2;
-
-CREATE TABLE `Actores` (
-    `ID_actor` int NOT NULL,
-    `nombre` varchar(25) NOT NULL,
-    `edad` int CHECK (edad >= 0 AND edad <= 120),
-    `nacionalidad` varchar(25) not null,
-    PRIMARY KEY (`ID_actor`)
-);
-
-CREATE TABLE `Directores` (
-    `ID_director` int NOT NULL,
-    `nombre` varchar(25) NOT NULL,
-    `edad` int CHECK (edad >= 0 AND edad <= 120),
-    `nacionalidad` varchar(25) not null,
-    PRIMARY KEY (`ID_director`)
-);
-
-CREATE TABLE `Peliculas` (
-    `ID_pelicula` int NOT NULL,
-    `nombre` varchar(25) NOT NULL,
-    `ID_director` int,
-    `nacionalidad` varchar(25) not null,
-    PRIMARY KEY (`ID_pelicula`),
-    FOREIGN KEY (`ID_director`) REFERENCES `Directores`(`ID_director`)
-);
-
-CREATE TABLE `peliculas_actores` (
-    `ID_pelicula` int NOT NULL,
-    `nombre_pelicula` varchar(25) NOT NULL,
-    `ID_actor` int NOT NULL,
-    `nombre_actor` varchar(25) NOT NULL,
-    `imbd` int,
-    PRIMARY KEY (`ID_pelicula`, `ID_actor`),
-    FOREIGN KEY (`ID_actor`) REFERENCES `Actores`(`ID_actor`),
-    FOREIGN KEY (`ID_pelicula`) REFERENCES `Peliculas`(`ID_pelicula`)
-);
-
 INSERT INTO `Actores` (`ID_actor`, `nombre`, `edad`, `nacionalidad`) VALUES
-(1, 'Tom Hanks', 65, 'Estados Unidos'), 
-(2, 'Meryl Streep', 72, 'Estados Unidos'), 
-(3, 'Leonardo DiCaprio', 47, 'Estados Unidos'), 
-(4, 'Viola Davis', 56, 'Estados Unidos'), 
-(5, 'Denzel Washington', 67, 'Estados Unidos');
+(30, 'Tom Hanks', 65, 'Estados Unidos'), 
+(40, 'Meryl Streep', 72, 'Estados Unidos'), 
+(39, 'Leonardo DiCaprio', 47, 'Estados Unidos'), 
+(41, 'Viola Davis', 56, 'Estados Unidos'), 
+(31, 'Denzel Washington', 67, 'Estados Unidos');
 
 INSERT INTO `Directores` (`ID_director`, `nombre`, `edad`,`nacionalidad`) VALUES
-(1, 'Steven Spielberg', 75, 'Estados Unidos'), 
-(2, 'Quentin Tarantino', 58, 'Estados Unidos'), 
-(3, 'Christopher Nolan', 51, 'Reino Unido'), 
-(4, 'Martin Scorsese', 79, 'Estados Unidos'), 
-(5, 'Ava DuVernay', 49, 'Estados Unidos');
+(41, 'Steven Spielberg', 75, 'Estados Unidos'), 
+(431, 'Quentin Tarantino', 58, 'Estados Unidos'), 
+(982, 'Christopher Nolan', 51, 'Reino Unido'), 
+(3123, 'Martin Scorsese', 79, 'Estados Unidos'), 
+(41, 'Ava DuVernay', 49, 'Estados Unidos');
 
 INSERT INTO `Peliculas` (`ID_pelicula`, `nombre`, `ID_director`,`nacionalidad`) VALUES
-(1, 'The Godfather', 4, 'Estados Unidos'), 
-(2, 'The Shawshank Redemption', 4, 'Estados Unidos'), 
-(3, 'The Dark Knight', 3, 'Estados Unidos'), 
-(4, 'Schindlers List', 1, 'Estados Unidos'), 
-(5, 'Pulp Fiction', 2, 'Estados Unidos');
+(3, 'The Godfather', 4, 'Estados Unidos'), 
+(23, 'The Shawshank Redemption', 4, 'Estados Unidos'), 
+(19, 'The Dark Knight', 3, 'Estados Unidos'), 
+(16, 'Schindlers List', 1, 'Estados Unidos'), 
+(14, 'Pulp Fiction', 2, 'Estados Unidos');
 
 INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `nombre_actor`,imbd) VALUES
 (1, 'The Godfather', 1, 'Tom Hanks',0068646),
@@ -73,74 +33,3 @@ INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `
 (5, 'Pulp Fiction', 2, 'Meryl Streep',0110912),
 (5, 'Pulp Fiction', 3, 'Leonardo DiCaprio',0110912),
 (5, 'Pulp Fiction', 5, 'Denzel Washington',0110912);
-
-DELIMITER //
-
-CREATE PROCEDURE listar_directores_peliculas()
-BEGIN
-    SELECT Peliculas.nombre, Directores.nombre AS Directores 
-    FROM Peliculas 
-    INNER JOIN Directores ON Peliculas.ID_director = Directores.ID_director;
-END;
-
-CREATE PROCEDURE consultaPorNacionalidad(in nacion varchar(25))
-BEGIN
-    SELECT * from Peliculas where nacionalidad = nacion;
-    SELECT * from Directores where nacionalidad = nacion;
-    SELECT * from Actores where nacionalidad = nacion;
-END;
-
-CREATE PROCEDURE peliculasPorNacionalidad(in nacion varchar(25))
-BEGIN
-    SELECT * from Peliculas where nacionalidad = nacion;
-END;
-
-CREATE PROCEDURE ponerMayusculas(in palabra varchar(25))
-BEGIN
-    select upper(palabra);
-END;
-
-CREATE PROCEDURE contar_directores()
-BEGIN
-    DECLARE num_directores INT;
-    SELECT COUNT(*) INTO num_directores FROM Directores;
-
-    
-
-    SET @num_llamados = IFNULL(@num_llamados, 0) + 1;
-    
-    IF NOT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'cuentaDirectores') THEN
-        SET @num_llamados=0;
-        CREATE TABLE cuentaDirectores (
-            fecha_hora DATETIME,
-            num_directores INT,
-            num_llamados INT
-        );
-    END IF;
-
-    if @num_llamados >= 10 THEN
-
-    delete from cuentaDirectores where num_llamados = (select min(num_llamados) from cuentaDirectores);
-
-    end if;
-    
-
-  
-    INSERT INTO cuentaDirectores (fecha_hora, num_directores, num_llamados) VALUES (NOW(), num_directores, @num_llamados);
-END //
-
-
-DELIMITER ;
-
-
-WHILE @@FETCH_STATUS = 0 DO
-        SET @sql = CONCAT('INSERT INTO ', p_nacionalidad, ' (code_imdb) VALUES (''', v_code_imdb, ''')');
-        PREPARE stmt FROM @sql;
-        EXECUTE stmt;
-        
-        FETCH cur_movies INTO v_code_imdb;
-    END WHILE;
-    
-mysql> call contar_directores;
-ERROR 1093 (HY000): You can't specify target table 'cuentaDirectores' for update in FROM clause
-
