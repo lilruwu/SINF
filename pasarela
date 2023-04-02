@@ -1,23 +1,23 @@
 INSERT INTO `Actores` (`ID_actor`, `nombre`, `edad`, `nacionalidad`) VALUES
-(30, 'Tom Hanks', 65, 'Estados Unidos'), 
-(40, 'Meryl Streep', 72, 'Estados Unidos'), 
-(39, 'Leonardo DiCaprio', 47, 'Estados Unidos'), 
-(41, 'Viola Davis', 56, 'Estados Unidos'), 
-(31, 'Denzel Washington', 67, 'Estados Unidos');
+(1, 'Tom Hanks', 65, 'Estados Unidos'), 
+(2, 'Meryl Streep', 72, 'Estados Unidos'), 
+(3, 'Leonardo DiCaprio', 47, 'Estados Unidos'), 
+(4, 'Viola Davis', 56, 'Estados Unidos'), 
+(5, 'Denzel Washington', 67, 'Estados Unidos');
 
 INSERT INTO `Directores` (`ID_director`, `nombre`, `edad`,`nacionalidad`) VALUES
-(41, 'Steven Spielberg', 75, 'Estados Unidos'), 
-(431, 'Quentin Tarantino', 58, 'Estados Unidos'), 
-(982, 'Christopher Nolan', 51, 'Reino Unido'), 
-(3123, 'Martin Scorsese', 79, 'Estados Unidos'), 
-(41, 'Ava DuVernay', 49, 'Estados Unidos');
+(1, 'Steven Spielberg', 75, 'Estados Unidos'), 
+(2, 'Quentin Tarantino', 58, 'Estados Unidos'), 
+(3, 'Christopher Nolan', 51, 'Reino Unido'), 
+(4, 'Martin Scorsese', 79, 'Estados Unidos'), 
+(5, 'Ava DuVernay', 49, 'Estados Unidos');
 
 INSERT INTO `Peliculas` (`ID_pelicula`, `nombre`, `ID_director`,`nacionalidad`) VALUES
-(3, 'The Godfather', 4, 'Estados Unidos'), 
-(23, 'The Shawshank Redemption', 4, 'Estados Unidos'), 
-(19, 'The Dark Knight', 3, 'Estados Unidos'), 
-(16, 'Schindlers List', 1, 'Estados Unidos'), 
-(14, 'Pulp Fiction', 2, 'Estados Unidos');
+(1, 'The Godfather', 4, 'Estados Unidos'), 
+(2, 'The Shawshank Redemption', 4, 'Estados Unidos'), 
+(3, 'The Dark Knight', 3, 'Estados Unidos'), 
+(4, 'Schindlers List', 1, 'Estados Unidos'), 
+(5, 'Pulp Fiction', 2, 'Estados Unidos');
 
 INSERT INTO `peliculas_actores` (`ID_pelicula`, `nombre_pelicula`, `ID_actor`, `nombre_actor`,imbd) VALUES
 (1, 'The Godfather', 1, 'Tom Hanks',0068646),
