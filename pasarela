@@ -1,3 +1,6 @@
+CREATE PROCEDURE extraer_imbds(in nacion varchar(25))
+BEGIN
+
 declare v_peli int;
 declare v_actores int;
 declare v_direct int;
@@ -55,3 +58,5 @@ WHILE @@FETCH_STATUS = 0 DO
 END WHILE;
 
 close directAux;
+
+END;
