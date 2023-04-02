@@ -4,20 +4,20 @@ CREATE PROCEDURE extraer_imbds(IN nac CHAR(50))
 BEGIN
 DECLARE codigo INT;
 DECLARE done BOOLEAN;
-DECLARE imbds_cursor CURSOR FOR ((SELECT IMBd FROM Directores WHERE Nacionalidad=nac)union(SELECT IMBd FROM Peliculas WHERE Nacionalidad=nac)union
-(SELECT IMBd FROM Actores WHERE Nacionalidad=nac));
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=TRUE;/esto servira para parar el bucle cuando no hay mas tuplas/
+DECLARE imbds_cursor CURSOR FOR ((SELECT ID_director FROM Directores WHERE Nacionalidad=nac)union(SELECT ID_pelicula FROM Peliculas WHERE Nacionalidad=nac)union
+(SELECT ID_actor FROM Actores WHERE Nacionalidad=nac));
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=TRUE;/**esto servira para parar el bucle cuando no hay mas tuplas*/
 IF nac = 'Spain' THEN
 DROP TABLE IF EXISTS Spain;
 CREATE TABLE Spain(
     IMBds INT UNSIGNED
 );
 
-OPEN imbds_cursor;/se abre el cursor para utilizarlo/
+OPEN imbds_cursor;/*se abre el cursor para utilizarlo*/
 
-loop1:LOOP/loop con etiqueta/
-FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
-IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+loop1:LOOP/*loop con etiqueta*/
+FETCH imbds_cursor INTO codigo;/*saca el valor de la tupla de la busqueda y lo mete en codigo*/
+IF done = TRUE THEN /*si no quedan mas tuplas, el handler se activara y pondra @done a true*/
 LEAVE loop1;
 ELSE 
 INSERT INTO Spain VALUES (codigo);
@@ -33,11 +33,11 @@ CREATE TABLE USA(
     IMBds INT UNSIGNED
 );
 
-OPEN imbds_cursor;/se abre el cursor para utilizarlo/
+OPEN imbds_cursor;/*se abre el cursor para utilizarlo*/
 
-loop1:LOOP/loop con etiqueta/
-FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
-IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+loop1:LOOP/*loop con etiqueta*/
+FETCH imbds_cursor INTO codigo;/*saca el valor de la tupla de la busqueda y lo mete en codigo*/
+IF done = TRUE THEN /*si no quedan mas tuplas, el handler se activara y pondra @done a true*/
 LEAVE loop1;
 ELSE 
 INSERT INTO USA VALUES (codigo);
@@ -51,11 +51,11 @@ DROP TABLE IF EXISTS England;
 CREATE TABLE England(
     IMBds INT UNSIGNED
 );
-OPEN imbds_cursor;/se abre el cursor para utilizarlo/
+OPEN imbds_cursor;/*se abre el cursor para utilizarlo*/
 
-loop1:LOOP/loop con etiqueta/
-FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
-IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+loop1:LOOP/*loop con etiqueta*/
+FETCH imbds_cursor INTO codigo;/*saca el valor de la tupla de la busqueda y lo mete en codigo*/
+IF done = TRUE THEN /*si no quedan mas tuplas, el handler se activara y pondra @done a true*/
 LEAVE loop1;
 ELSE 
 INSERT INTO England VALUES (codigo);
@@ -69,11 +69,11 @@ DROP TABLE IF EXISTS Mexico;
 CREATE TABLE Mexico(
     IMBds INT UNSIGNED
 );
-OPEN imbds_cursor;/se abre el cursor para utilizarlo/
+OPEN imbds_cursor;/*se abre el cursor para utilizarlo*/
 
-loop1:LOOP/loop con etiqueta/
-FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
-IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+loop1:LOOP/*loop con etiqueta*/
+FETCH imbds_cursor INTO codigo;/*saca el valor de la tupla de la busqueda y lo mete en codigo*/
+IF done = TRUE THEN /*si no quedan mas tuplas, el handler se activara y pondra @done a true*/
 LEAVE loop1;
 ELSE 
 INSERT INTO Mexico VALUES (codigo);
@@ -83,4 +83,4 @@ END LOOP;
 CLOSE imbds_cursor;
 END IF;
 END 
-&&/no usar el mismo nombre para los parametros que para las columnas de las tablas -> los confundira/
+&&/
