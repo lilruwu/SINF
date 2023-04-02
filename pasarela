@@ -1,72 +1,86 @@
-CREATE PROCEDURE extraer_imbds(in nacion varchar(25))
+drop procedure if exists extraer_imbds;
+DELIMITER &&
+CREATE PROCEDURE extraer_imbds(IN nac CHAR(50))
 BEGIN
-    declare v_peli int;
-    declare v_actores int;
-    declare v_direct int;
-    declare fin_cursor boolean default false;
-    DECLARE peliAux CURSOR FOR
-    SELECT ID_pelicula from Peliculas where nacionalidad = nacion;
-    declare actoresAux cursor for
-    SELECT ID_actor from Actores where nacionalidad = nacion;
-    declare directAux cursor for
-    SELECT ID_director from Directores where nacionalidad = nacion;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin_cursor = TRUE;
+DECLARE codigo INT;
+DECLARE done BOOLEAN;
+DECLARE imbds_cursor CURSOR FOR ((SELECT IMBd FROM Directores WHERE Nacionalidad=nac)union(SELECT IMBd FROM Peliculas WHERE Nacionalidad=nac)union
+(SELECT IMBd FROM Actores WHERE Nacionalidad=nac));
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET done=TRUE;/esto servira para parar el bucle cuando no hay mas tuplas/
+IF nac = 'Spain' THEN
+DROP TABLE IF EXISTS Spain;
+CREATE TABLE Spain(
+    IMBds INT UNSIGNED
+);
 
-  
-   
+OPEN imbds_cursor;/se abre el cursor para utilizarlo/
 
-    -- define el nombre de la tabla según la nacionalidad
+loop1:LOOP/loop con etiqueta/
+FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
+IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+LEAVE loop1;
+ELSE 
+INSERT INTO Spain VALUES (codigo);
+END IF;
+END LOOP;
 
-    -- crea una nueva relación
-    set @sql = concat('CREATE TABLE IF NOT EXISTS ', nacion, ' (nacionalidad VARCHAR(255))');
-    prepare stmt from @sql;
-    execute stmt;
+CLOSE imbds_cursor;
+END IF;
 
-    
+IF nac = 'USA' THEN
+DROP TABLE IF EXISTS USA;
+CREATE TABLE USA(
+    IMBds INT UNSIGNED
+);
 
-  /*peliculas*/
-    OPEN peliAux;
-    fetch peliAux into v_peli;
+OPEN imbds_cursor;/se abre el cursor para utilizarlo/
 
-    WHILE not fin_cursor DO
-        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_peli, ''')');
-        PREPARE stmt FROM @sql;
-        EXECUTE stmt;
+loop1:LOOP/loop con etiqueta/
+FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
+IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+LEAVE loop1;
+ELSE 
+INSERT INTO USA VALUES (codigo);
+END IF;
+END LOOP;
+CLOSE imbds_cursor;
+END IF;
 
-        fetch peliAux into v_peli;
-    END WHILE;
+IF nac = 'England' THEN
+DROP TABLE IF EXISTS England;
+CREATE TABLE England(
+    IMBds INT UNSIGNED
+);
+OPEN imbds_cursor;/se abre el cursor para utilizarlo/
 
-    close peliAux;
+loop1:LOOP/loop con etiqueta/
+FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
+IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+LEAVE loop1;
+ELSE 
+INSERT INTO England VALUES (codigo);
+END IF;
+END LOOP;
+CLOSE imbds_cursor;
+END IF;
 
-    /*actores*/
-    open actoresAux;
-    fetch actoresAux into v_actores;
+IF nac = 'Mexico' THEN
+DROP TABLE IF EXISTS Mexico;
+CREATE TABLE Mexico(
+    IMBds INT UNSIGNED
+);
+OPEN imbds_cursor;/se abre el cursor para utilizarlo/
 
-    WHILE not fin_cursor DO
-        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_actores, ''')');
-        PREPARE stmt FROM @sql;
-        EXECUTE stmt;
+loop1:LOOP/loop con etiqueta/
+FETCH imbds_cursor INTO codigo;/saca el valor de la tupla de la busqueda y lo mete en codigo/
+IF done = TRUE THEN /si no quedan mas tuplas, el handler se activara y pondra @done a true/
+LEAVE loop1;
+ELSE 
+INSERT INTO Mexico VALUES (codigo);
+END IF;
+END LOOP;
 
-        fetch actoresAux into v_actores;
-    END WHILE;
-
-    close actoresAux;
-
-    /*directores*/
-    open directAux;
-    fetch directAux into v_direct;
-
-    WHILE not fin_cursor DO
-        SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_direct, ''')');
-        PREPARE stmt FROM @sql;
-        EXECUTE stmt;
-
-        fetch directAux into v_direct;
-    END WHILE;
-
-    close directAux;
-
-END;
-    
-   mysql> call extraer_imbds('Estados Unidos');
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''Estados Unidos' (imbd INT)' at line 1
+CLOSE imbds_cursor;
+END IF;
+END 
+&&/no usar el mismo nombre para los parametros que para las columnas de las tablas -> los confundira/
