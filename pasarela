@@ -132,6 +132,15 @@ END //
 
 DELIMITER ;
 
+
+WHILE @@FETCH_STATUS = 0 DO
+        SET @sql = CONCAT('INSERT INTO ', p_nacionalidad, ' (code_imdb) VALUES (''', v_code_imdb, ''')');
+        PREPARE stmt FROM @sql;
+        EXECUTE stmt;
+        
+        FETCH cur_movies INTO v_code_imdb;
+    END WHILE;
+    
 mysql> call contar_directores;
 ERROR 1093 (HY000): You can't specify target table 'cuentaDirectores' for update in FROM clause
 
