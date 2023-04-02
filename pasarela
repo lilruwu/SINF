@@ -3,12 +3,14 @@ BEGIN
     declare v_peli int;
     declare v_actores int;
     declare v_direct int;
+    declare fin_cursor boolean default false;
     DECLARE peliAux CURSOR FOR
     SELECT ID_pelicula from Peliculas where nacionalidad = nacion;
     declare actoresAux cursor for
     SELECT ID_actor from Actores where nacionalidad = nacion;
     declare directAux cursor for
     SELECT ID_director from Directores where nacionalidad = nacion;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin_cursor = TRUE;
 
   
    
@@ -16,17 +18,17 @@ BEGIN
     -- define el nombre de la tabla según la nacionalidad
 
     -- crea una nueva relación
-    set @sql = concat('CREATE TABLE IF NOT EXISTS ', nacion, ' (code_imbd VARCHAR(255))');
+    set @sql = concat('CREATE TABLE IF NOT EXISTS ', nacion, ' (nacionalidad VARCHAR(255))');
     prepare stmt from @sql;
     execute stmt;
 
     
 
-    --peliculas--
+  /*peliculas*/
     OPEN peliAux;
     fetch peliAux into v_peli;
 
-    WHILE @@FETCH_STATUS = 0 DO
+    WHILE not fin_cursor DO
         SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_peli, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
@@ -36,11 +38,11 @@ BEGIN
 
     close peliAux;
 
-    --actores
+    /*actores*/
     open actoresAux;
     fetch actoresAux into v_actores;
 
-    WHILE @@FETCH_STATUS = 0 DO
+    WHILE not fin_cursor DO
         SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_actores, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
@@ -50,11 +52,11 @@ BEGIN
 
     close actoresAux;
 
-    --directores
+    /*directores*/
     open directAux;
     fetch directAux into v_direct;
 
-    WHILE @@FETCH_STATUS = 0 DO
+    WHILE not fin_cursor DO
         SET @sql = CONCAT('INSERT INTO ', nacion, ' (code_imdb) VALUES (''', v_direct, ''')');
         PREPARE stmt FROM @sql;
         EXECUTE stmt;
@@ -65,11 +67,6 @@ BEGIN
     close directAux;
 
 END;
-
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--peliculas
-    OPEN peliAux;
-    fetch peliAux into v_peli;
-
-    WHILE @@FETCH_' at line 25
-
-DECLARE CONTINUE HANDLER FOR NOT FOUND SET fin_cursor = TRUE;
+    
+    mysql> call extraer_imbds('Estados Unidos');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Unidos (code_imdb) VALUES ('1')' at line 1
