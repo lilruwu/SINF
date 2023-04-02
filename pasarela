@@ -1,14 +1,11 @@
-CREATE TRIGGER update_imbds
-AFTER INSERT ON Peliculas
+CREATE TRIGGER asegurar_actores AFTER INSERT ON Peliculas
 FOR EACH ROW
 BEGIN
-    IF NEW.Nacionalidad = 'Spain' THEN
-        INSERT INTO Spain (IMBds) VALUES (NEW.IMBd);
-    ELSEIF NEW.Nacionalidad = 'USA' THEN
-        INSERT INTO USA (IMBds) VALUES (NEW.IMBd);
-    ELSEIF NEW.Nacionalidad = 'England' THEN
-        INSERT INTO England (IMBds) VALUES (NEW.IMBd);
-    ELSEIF NEW.Nacionalidad = 'Mexico' THEN
-        INSERT INTO Mexico (IMBds) VALUES (NEW.IMBd);
+    DECLARE num_actores INT;
+    SELECT COUNT(*) INTO num_actores FROM PeliculasActores WHERE ID_pelicula = NEW.ID_pelicula;
+    IF num_actores = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se pueden insertar películas sin actores asociados';
+        ROLLBACK;
     END IF;
 END;
+
