@@ -68,5 +68,5 @@ BEGIN
 
 END;
     
-    mysql> call extraer_imbds('Estados Unidos');
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Unidos (code_imdb) VALUES ('1')' at line 1
+   mysql> call extraer_imbds('Estados Unidos');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''Estados Unidos' (imbd INT)' at line 1
