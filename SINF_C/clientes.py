@@ -7,7 +7,7 @@ sql_file = io.StringIO()
 
 
 # Generar 10 registros aleatorios y añadirlos a la tabla
-for i in range(1000000):
+for i in range(10000):
     dni = ''.join(random.choice(string.digits) for _ in range(8)) + random.choice(string.ascii_uppercase)
     numero_de_tarjeta = ''.join(random.choice(string.digits) for _ in range(16))
     sql_file.write("INSERT INTO cliente (dni, numero_de_tarjeta) VALUES ('%s', '%s');\n" % (dni, numero_de_tarjeta))
