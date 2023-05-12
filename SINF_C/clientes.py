@@ -10,7 +10,7 @@ sql_file = io.StringIO()
 for i in range(1000):
     dni = ''.join(random.choice(string.digits) for _ in range(8)) + random.choice(string.ascii_uppercase)
     numero_de_tarjeta = ''.join(random.choice(string.digits) for _ in range(16))
-    sql_file.write("INSERT INTO cliente (dni, numero_de_tarjeta) VALUES ('%s', '%s');\n" % (dni, numero_de_tarjeta))
+    sql_file.write("INSERT INTO Cliente (dni, numero_de_tarjeta) VALUES ('%s', '%s');\n" % (dni, numero_de_tarjeta))
 
 # Escribir el contenido del objeto de archivo en un archivo .sql
 with open('clientes.sql', 'w') as f:
