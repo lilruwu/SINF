@@ -1,0 +1,12 @@
+USE Taquilla;
+
+DELETE FROM Espectaculo;
+DELETE FROM Recinto;
+DELETE FROM Grada;
+DELETE FROM Usuario;
+DELETE FROM Localidad;
+DELETE FROM Cliente;
+DELETE FROM Evento;
+DELETE FROM UsLoc;
+DELETE FROM Oferta;
+DELETE FROM Compra;

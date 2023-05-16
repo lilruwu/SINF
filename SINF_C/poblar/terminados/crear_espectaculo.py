@@ -1,0 +1,71 @@
+import csv
+import random
+import mysql.connector
+
+numero_espectaculos = 1000000
+archivo_csv = 'pelis_limpio.csv'
+
+# Leer el archivo CSV y obtener los nombres de los espectáculos
+nombres_espectaculos = []
+actores_espectaculos = []
+descripciones_espectaculos = []
+
+with open(archivo_csv, 'r') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        nombres_espectaculos.append(row['Title'])
+        actores_espectaculos.append(row['Actors'])
+        descripciones_espectaculos.append(row['Description'])
+
+# Crear espectáculos únicos basados en la lista original
+nuevos_espectaculos = set()  # Conjunto para almacenar los espectáculos generados
+
+while len(nuevos_espectaculos) < numero_espectaculos:
+    indice_aleatorio = random.randint(0, len(nombres_espectaculos) - 1)
+    nombre_espectaculo = nombres_espectaculos[indice_aleatorio][:40]
+    actores_espectaculo = actores_espectaculos[indice_aleatorio][:49]
+    descripcion_espectaculo = descripciones_espectaculos[indice_aleatorio][:49]
+
+    palabra_aleatoria = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz') for _ in range(5))
+    nuevo_nombre = f"{nombre_espectaculo} {palabra_aleatoria}"
+
+    nuevos_espectaculos.add((nuevo_nombre, actores_espectaculo, descripcion_espectaculo))
+
+nuevos_espectaculos = list(nuevos_espectaculos)  # Convertir el conjunto a una lista
+
+# Guardar los nuevos espectáculos en un archivo CSV separado por punto y coma
+output_file = '/var/lib/mysql/Taquilla/nuevas_pelis.csv'
+with open(output_file, 'w', newline='') as file:
+    writer = csv.writer(file, delimiter=';')
+    writer.writerow(['Titulo', 'Actores', 'Descripcion'])
+    writer.writerows(nuevos_espectaculos)
+
+print(f"Se han creado y guardado los {len(nuevos_espectaculos)} espectáculos únicos en el archivo {output_file}.")
+
+# Cargar el archivo CSV en la base de datos
+config = {
+    'user': 'juan',
+    'password': '1234',
+    'host': 'localhost',
+    'database': 'Taquilla'
+}
+
+# Crea la conexión a la base de datos
+connection = mysql.connector.connect(**config)
+
+cursor = connection.cursor()
+
+load_query = """
+    LOAD DATA INFILE '{}' INTO TABLE Espectaculo
+    FIELDS TERMINATED BY ';'
+    IGNORE 1 LINES
+    (nombre_espectaculo, participantes_espectaculo, descripcion_espectaculo)
+""".format(output_file)
+
+cursor.execute(load_query)
+connection.commit()
+
+cursor.close()
+connection.close()
+
+print("El archivo CSV se ha cargado correctamente en la tabla Espectaculo de la base de datos.")
